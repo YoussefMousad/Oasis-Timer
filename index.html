@@ -1,0 +1,1377 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Oasis Timer - Premium Focus Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        slate: {
+                            50: '#f8fafc',
+                            100: '#f1f5f9',
+                            200: '#e2e8f0',
+                            800: '#1e293b',
+                            850: '#151e2e',
+                            900: '#0f172a',
+                            950: '#020617',
+                        },
+                        teal: {
+                            400: '#2dd4bf',
+                            500: '#14b8a6',
+                            600: '#0d9488',
+                        },
+                        amber: {
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,500;0,600;1,500&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* Custom Elegant Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 9999px;
+        }
+
+        .dark ::-webkit-scrollbar-thumb {
+            background: #334155;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Delicate Animated Gradient Background */
+        .bg-oasis-mesh {
+            position: fixed;
+            inset: 0;
+            z-index: -1;
+            background: radial-gradient(circle at 15% 50%, rgba(20, 184, 166, 0.08), transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(245, 158, 11, 0.05), transparent 50%);
+            transition: background 0.5s ease;
+        }
+
+        .dark .bg-oasis-mesh {
+            background: radial-gradient(circle at 15% 50%, rgba(20, 184, 166, 0.12), transparent 50%),
+                radial-gradient(circle at 85% 30%, rgba(245, 158, 11, 0.08), transparent 50%);
+        }
+
+        /* Breathing Pulse Effect for Break Modal */
+        @keyframes royal-breathe {
+            0%, 100% {
+                transform: scale(1);
+                opacity: 0.8;
+                box-shadow: 0 0 20px rgba(20, 184, 166, 0.2);
+            }
+            50% {
+                transform: scale(1.15);
+                opacity: 0.4;
+                box-shadow: 0 0 50px rgba(245, 158, 11, 0.3);
+            }
+        }
+
+        .animate-breathe {
+            animation: royal-breathe 6s ease-in-out infinite;
+        }
+
+        /* Soft Card Glows */
+        .card-glow {
+            transition: box-shadow 0.3s ease;
+        }
+
+        .card-glow:hover {
+            box-shadow: 0 10px 40px -10px rgba(20, 184, 166, 0.15);
+        }
+
+        .dark .card-glow:hover {
+            box-shadow: 0 10px 40px -10px rgba(20, 184, 166, 0.25);
+        }
+    </style>
+</head>
+
+<body
+    class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 font-sans antialiased min-h-screen flex flex-col justify-between selection:bg-teal-500/30 selection:text-teal-900 dark:selection:text-teal-100 transition-colors duration-300">
+
+    <!-- Ambient Background -->
+    <div class="bg-oasis-mesh"></div>
+
+    <header
+        class="border-b border-slate-200 dark:border-slate-800 bg-white/70 dark:bg-slate-900/70 backdrop-blur-md sticky top-0 z-30 transition-colors duration-300">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16">
+
+                <!-- Logo & Title -->
+                <div class="flex items-center gap-3">
+                    <div
+                        class="h-10 w-10 rounded-2xl bg-gradient-to-tr from-teal-500 to-amber-400 flex items-center justify-center text-white shadow-lg shadow-teal-500/20">
+                        <i class="fa-solid fa-leaf text-lg"></i>
+                    </div>
+                    <div>
+                        <h1
+                            class="font-serif font-semibold text-lg leading-tight tracking-wide text-slate-900 dark:text-white flex items-center gap-2">
+                            Oasis Timer <span
+                                class="text-[10px] font-sans font-medium px-2 py-0.5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20 uppercase tracking-widest">Premium</span>
+                        </h1>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-light">Elegant Focus & Productivity
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Navigation Tabs -->
+                <nav
+                    class="hidden sm:flex items-center gap-1 bg-slate-100 dark:bg-slate-950/60 p-1 rounded-2xl border border-slate-200 dark:border-slate-800 transition-colors">
+                    <button onclick="switchTab('timer')" id="nav-timer"
+                        class="nav-btn px-4 py-2 text-sm font-medium rounded-xl transition-all text-teal-700 bg-white shadow-sm dark:text-teal-400 dark:bg-slate-800/80 flex items-center gap-2">
+                        <i class="fa-solid fa-hourglass-half text-xs"></i> Session
+                    </button>
+                    <button onclick="switchTab('presets')" id="nav-presets"
+                        class="nav-btn px-4 py-2 text-sm font-medium rounded-xl transition-all text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-crown text-xs"></i> Presets
+                    </button>
+                    <button onclick="switchTab('analytics')" id="nav-analytics"
+                        class="nav-btn px-4 py-2 text-sm font-medium rounded-xl transition-all text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-chart-line text-xs"></i> Insights
+                    </button>
+                    <button onclick="switchTab('settings')" id="nav-settings"
+                        class="nav-btn px-4 py-2 text-sm font-medium rounded-xl transition-all text-slate-500 hover:text-slate-900 dark:text-slate-400 dark:hover:text-white flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-xs"></i> Settings
+                    </button>
+                </nav>
+
+                <!-- Right Controls -->
+                <div class="flex items-center gap-3">
+                    <button id="theme-toggle-btn" onclick="toggleTheme()"
+                        class="h-9 w-9 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700 transition flex items-center justify-center">
+                        <i id="theme-icon" class="fa-solid fa-moon"></i>
+                    </button>
+                    <button id="notify-perm-btn" onclick="requestNotificationPermission()"
+                        class="text-xs px-4 py-2 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-slate-200 dark:border-slate-700 transition flex items-center gap-2 font-medium">
+                        <i class="fa-regular fa-bell"></i> <span class="hidden md:inline">Alerts</span>
+                    </button>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Mobile Bottom Navigation Bar -->
+        <div
+            class="sm:hidden flex border-t border-slate-200 dark:border-slate-800 bg-white/90 dark:bg-slate-900/90 px-2 py-1 justify-around transition-colors">
+            <button onclick="switchTab('timer')" id="mob-nav-timer"
+                class="p-2 text-teal-600 dark:text-teal-400 flex flex-col items-center text-[10px] font-medium uppercase tracking-wider">
+                <i class="fa-solid fa-hourglass-half mb-1 text-sm"></i> Timer
+            </button>
+            <button onclick="switchTab('presets')" id="mob-nav-presets"
+                class="p-2 text-slate-500 dark:text-slate-400 flex flex-col items-center text-[10px] font-medium uppercase tracking-wider">
+                <i class="fa-solid fa-crown mb-1 text-sm"></i> Presets
+            </button>
+            <button onclick="switchTab('analytics')" id="mob-nav-analytics"
+                class="p-2 text-slate-500 dark:text-slate-400 flex flex-col items-center text-[10px] font-medium uppercase tracking-wider">
+                <i class="fa-solid fa-chart-line mb-1 text-sm"></i> Insights
+            </button>
+            <button onclick="switchTab('settings')" id="mob-nav-settings"
+                class="p-2 text-slate-500 dark:text-slate-400 flex flex-col items-center text-[10px] font-medium uppercase tracking-wider">
+                <i class="fa-solid fa-sliders mb-1 text-sm"></i> Settings
+            </button>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 flex-1 w-full">
+
+        <!-- ==================== TAB 1: LIVE FOCUS SESSION ==================== -->
+        <section id="tab-timer" class="tab-content block space-y-8 animate-fade-in">
+
+            <!-- Top Preset Selector Bar -->
+            <div
+                class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-4 flex flex-col sm:flex-row items-center justify-between gap-4 card-glow">
+                <div class="flex items-center gap-4 w-full sm:w-auto">
+                    <div
+                        class="p-3 rounded-2xl bg-amber-100 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20">
+                        <i class="fa-solid fa-gem text-lg"></i>
+                    </div>
+                    <div>
+                        <span
+                            class="text-[10px] text-slate-500 dark:text-slate-400 block font-semibold uppercase tracking-widest mb-0.5">Active
+                            Routine</span>
+                        <select id="active-preset-select" onchange="changeActivePreset(this.value)"
+                            class="bg-transparent border-none text-slate-900 dark:text-slate-100 font-serif font-semibold text-lg cursor-pointer w-full sm:w-64 focus:ring-0 p-0">
+                            <!-- Dynamically Populated -->
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Active Preset Toggles Summary Badges -->
+                <div id="preset-feature-badges"
+                    class="flex flex-wrap items-center gap-2 w-full sm:w-auto justify-start sm:justify-end">
+                    <!-- Dynamically populated badge tags -->
+                </div>
+            </div>
+
+            <!-- Main Dual Column Layout -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+                <!-- Left/Center: Timer Display Card (Lg: 7 columns) -->
+                <div
+                    class="lg:col-span-7 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] p-8 sm:p-12 flex flex-col items-center justify-center relative overflow-hidden shadow-xl shadow-teal-500/5 card-glow">
+
+                    <div id="session-type-indicator"
+                        class="text-xs font-semibold uppercase tracking-widest text-teal-600 bg-teal-50 dark:text-teal-400 dark:bg-teal-500/10 border border-teal-200 dark:border-teal-500/20 px-4 py-1.5 rounded-full mb-8">
+                        Deep Work Flow
+                    </div>
+
+                    <!-- Circular SVG Countdown Ring -->
+                    <div class="relative w-64 h-64 sm:w-80 sm:h-80 flex items-center justify-center my-2">
+                        <svg class="w-full h-full transform -rotate-90 drop-shadow-md" viewBox="0 0 100 100">
+                            <!-- Track background -->
+                            <circle cx="50" cy="50" r="46" stroke="currentColor" stroke-width="3"
+                                class="text-slate-100 dark:text-slate-800" fill="transparent" />
+                            <!-- Progress Ring -->
+                            <circle id="timer-progress-ring" cx="50" cy="50" r="46" stroke="currentColor"
+                                stroke-width="4" class="text-teal-500 transition-all duration-1000 ease-linear"
+                                stroke-dasharray="289.03" stroke-dashoffset="0" stroke-linecap="round"
+                                fill="transparent" />
+                        </svg>
+
+                        <!-- Timer Center Text -->
+                        <div class="absolute inset-0 flex flex-col items-center justify-center text-center">
+                            <span id="time-display"
+                                class="font-light text-5xl sm:text-7xl tracking-tighter text-slate-900 dark:text-white"
+                                style="font-feature-settings: 'tnum';">00:00</span>
+                            <span id="timer-subtext"
+                                class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-3 uppercase tracking-widest font-medium">Remaining</span>
+                        </div>
+                    </div>
+
+                    <!-- Main Controls Row -->
+                    <div class="flex items-center gap-4 mt-10 mb-6">
+                        <button id="btn-start-pause" onclick="toggleTimer()"
+                            class="px-8 py-4 rounded-2xl font-semibold text-white bg-teal-500 hover:bg-teal-600 dark:bg-gradient-to-r dark:from-teal-500 dark:to-teal-400 dark:text-slate-950 active:scale-95 transition-all shadow-lg shadow-teal-500/30 flex items-center gap-3">
+                            <i class="fa-solid fa-play text-sm"></i> <span>Begin Flow</span>
+                        </button>
+                        <button onclick="resetTimer()"
+                            class="p-4 rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 active:scale-95 transition">
+                            <i class="fa-solid fa-rotate-right"></i>
+                        </button>
+                        <button onclick="skipToNextBreak()"
+                            class="px-5 py-4 rounded-2xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 border border-slate-200 dark:border-slate-700 active:scale-95 transition text-xs font-semibold uppercase tracking-wider flex items-center gap-2">
+                            <i class="fa-solid fa-forward-step"></i> Skip
+                        </button>
+                    </div>
+
+                    <!-- SOUND & AMBIENT NOISE CONTROLS -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full border-t border-slate-100 dark:border-slate-800/60 pt-6 mt-2">
+                      <div class="flex items-center justify-between sm:justify-start gap-3">
+                        <label for="sound-type" class="text-xs font-semibold uppercase tracking-widest text-slate-500 dark:text-slate-400">Alarm:</label>
+                        <select id="sound-type" class="bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium rounded-xl px-3 py-2 cursor-pointer focus:outline-none focus:border-teal-500 transition shadow-sm">
+                          <option value="synth">Synth Beep</option>
+                          <option value="bowl">Singing Bowl</option>
+                          <option value="gong">Deep Gong</option>
+                        </select>
+                      </div>
+
+                      <div class="flex items-center justify-between sm:justify-end gap-3">
+                        <label for="ambient-type" class="text-xs font-semibold uppercase tracking-widest text-slate-500 dark:text-slate-400">Ambient:</label>
+                        <select id="ambient-type" onchange="changeAmbientSound(this.value)" class="bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-700 dark:text-slate-300 text-xs font-medium rounded-xl px-3 py-2 cursor-pointer focus:outline-none focus:border-teal-500 transition shadow-sm">
+                          <option value="off">Off</option>
+                          <option value="whitenoise">White Noise</option>
+                          <option value="rain">Soft Rain</option>
+                          <option value="drone">Cosmic Drone</option>
+                        </select>
+                      </div>
+                    </div>
+
+                    <!-- Live Status Bar -->
+                    <div id="live-status-bar"
+                        class="mt-8 text-xs font-medium text-slate-500 dark:text-slate-400 flex items-center gap-2 bg-slate-50 dark:bg-slate-950/50 px-4 py-2 rounded-full border border-slate-200 dark:border-slate-800">
+                        <span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span> Ready to focus
+                    </div>
+                </div>
+
+                <!-- Right Column: Scheduled Alerts & Task List Stack -->
+                <div class="lg:col-span-5 space-y-6">
+                    
+                    <!-- Journey Map Card -->
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] p-8 card-glow">
+                        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-5 mb-5">
+                            <h3 class="font-serif font-semibold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                                <i class="fa-solid fa-compass text-amber-500"></i> Journey Map
+                            </h3>
+                            <span id="notification-count-badge"
+                                class="text-[10px] uppercase tracking-widest font-bold px-2.5 py-1 rounded-lg bg-slate-100 text-slate-600 dark:bg-slate-800 dark:text-slate-300">
+                                0 Milestones
+                            </span>
+                        </div>
+                        <div id="timeline-list" class="space-y-3 max-h-[220px] overflow-y-auto pr-1">
+                            <!-- Dynamically Rendered -->
+                        </div>
+                    </div>
+
+                    <!-- Session Task List Card (NEW FEATURE) -->
+                    <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] p-8 card-glow">
+                        <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-5 mb-5">
+                            <h3 class="font-serif font-semibold text-lg text-slate-900 dark:text-white flex items-center gap-2">
+                                <i class="fa-solid fa-list-check text-teal-500"></i> Session Tasks
+                            </h3>
+                            <span id="task-counter-badge" class="text-[10px] uppercase tracking-widest font-bold px-2.5 py-1 rounded-lg bg-teal-50 text-teal-700 dark:bg-teal-500/10 dark:text-teal-400">
+                                0 Done
+                            </span>
+                        </div>
+
+                        <!-- Add Task Input Form -->
+                        <form onsubmit="addNewTask(event)" class="flex items-center gap-2 mb-4">
+                            <input type="text" id="new-task-input" placeholder="Add a focus objective..." required
+                                class="flex-1 bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-xs text-slate-900 dark:text-slate-100 focus:outline-none focus:border-teal-500 transition" />
+                            <button type="submit" class="px-4 py-2.5 rounded-xl bg-teal-500 hover:bg-teal-600 text-white font-semibold text-xs transition shadow-sm">
+                                <i class="fa-solid fa-plus"></i>
+                            </button>
+                        </form>
+
+                        <!-- Task Items Container -->
+                        <div id="task-list-container" class="space-y-2.5 max-h-[200px] overflow-y-auto pr-1">
+                            <!-- Dynamically populated tasks -->
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- ==================== TAB 2: PRESET BUILDER & MANAGER ==================== -->
+        <section id="tab-presets" class="tab-content hidden space-y-8 animate-fade-in">
+
+            <div
+                class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-6">
+                <div>
+                    <h2 class="text-3xl font-serif font-semibold text-slate-900 dark:text-white tracking-wide">Routine
+                        Library</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 font-light mt-1">Design your perfect balance of
+                        deep work and mindful recovery.</p>
+                </div>
+                <button onclick="createNewPresetModal()"
+                    class="px-6 py-3 rounded-2xl bg-slate-900 text-white hover:bg-slate-800 dark:bg-gradient-to-r dark:from-amber-500 dark:to-amber-400 dark:text-slate-950 font-semibold text-sm transition shadow-lg shadow-amber-500/20 flex items-center gap-2">
+                    <i class="fa-solid fa-plus"></i> Craft Routine
+                </button>
+            </div>
+
+            <!-- Presets Grid Display -->
+            <div id="presets-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- Dynamically Populated Presets Cards -->
+            </div>
+        </section>
+
+
+        <!-- ==================== TAB 3: ANALYTICS DASHBOARD ==================== -->
+        <section id="tab-analytics" class="tab-content hidden space-y-8 animate-fade-in">
+
+            <div
+                class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 border-b border-slate-200 dark:border-slate-800 pb-6">
+                <div>
+                    <h2 class="text-3xl font-serif font-semibold text-slate-900 dark:text-white tracking-wide">
+                        Productivity Insights</h2>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 font-light mt-1">Review your focus patterns and
+                        rest adherence over time.</p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="exportAnalyticsJSON()"
+                        class="px-4 py-2.5 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold uppercase tracking-wider border border-slate-200 dark:border-slate-700 transition flex items-center gap-2">
+                        <i class="fa-solid fa-download"></i> Export
+                    </button>
+                    <button onclick="clearAnalyticsLogs()"
+                        class="px-4 py-2.5 rounded-xl bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-500/10 dark:hover:bg-red-500/20 dark:text-red-400 text-xs font-semibold uppercase tracking-wider border border-red-200 dark:border-red-500/20 transition flex items-center gap-2">
+                        <i class="fa-solid fa-eraser"></i> Clear
+                    </button>
+                </div>
+            </div>
+
+            <!-- Key KPI Cards -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
+                <div
+                    class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 flex flex-col justify-between card-glow">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div
+                            class="p-3.5 rounded-2xl bg-teal-50 text-teal-600 dark:bg-teal-500/10 dark:text-teal-400 border border-teal-100 dark:border-teal-500/20">
+                            <i class="fa-solid fa-hourglass-start text-xl"></i>
+                        </div>
+                        <span
+                            class="text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-widest">Deep
+                            Work</span>
+                    </div>
+                    <span id="stat-total-focus" class="text-4xl font-light text-slate-900 dark:text-white">0m</span>
+                </div>
+
+                <div
+                    class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 flex flex-col justify-between card-glow">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div
+                            class="p-3.5 rounded-2xl bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400 border border-blue-100 dark:border-blue-500/20">
+                            <i class="fa-solid fa-check-double text-xl"></i>
+                        </div>
+                        <span
+                            class="text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-widest">Sessions</span>
+                    </div>
+                    <span id="stat-completed-sessions"
+                        class="text-4xl font-light text-slate-900 dark:text-white">0</span>
+                </div>
+
+                <div
+                    class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 flex flex-col justify-between card-glow">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div
+                            class="p-3.5 rounded-2xl bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400 border border-amber-100 dark:border-amber-500/20">
+                            <i class="fa-solid fa-spa text-xl"></i>
+                        </div>
+                        <span
+                            class="text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-widest">Rests
+                            Taken</span>
+                    </div>
+                    <span id="stat-breaks-taken" class="text-4xl font-light text-slate-900 dark:text-white">0</span>
+                </div>
+
+                <div
+                    class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 flex flex-col justify-between card-glow">
+                    <div class="flex items-center gap-4 mb-4">
+                        <div
+                            class="p-3.5 rounded-2xl bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400 border border-slate-200 dark:border-slate-700">
+                            <i class="fa-solid fa-forward text-xl"></i>
+                        </div>
+                        <span
+                            class="text-xs text-slate-500 dark:text-slate-400 font-semibold uppercase tracking-widest">Skipped</span>
+                    </div>
+                    <span id="stat-breaks-skipped" class="text-4xl font-light text-slate-900 dark:text-white">0</span>
+                </div>
+
+            </div>
+
+            <!-- Recent Session Log Table -->
+            <div
+                class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 card-glow">
+                <h3 class="font-serif font-semibold text-xl text-slate-900 dark:text-white mb-2">Recent Journey Log</h3>
+                <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 font-light">Your latest focus and mindfulness
+                    entries.</p>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-600 dark:text-slate-300">
+                        <thead
+                            class="bg-slate-50 dark:bg-slate-950/50 text-slate-500 dark:text-slate-400 uppercase tracking-widest text-[10px] font-bold border-b border-slate-200 dark:border-slate-800">
+                            <tr>
+                                <th class="p-4 rounded-tl-xl">Routine</th>
+                                <th class="p-4">Duration</th>
+                                <th class="p-4">Mindful Rest</th>
+                                <th class="p-4 rounded-tr-xl">Time Completed</th>
+                            </tr>
+                        </thead>
+                        <tbody id="session-log-rows" class="divide-y divide-slate-100 dark:divide-slate-800">
+                            <!-- Dynamically Populated -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ==================== TAB 4: GLOBAL SETTINGS ==================== -->
+        <section id="tab-settings" class="tab-content hidden space-y-8 animate-fade-in">
+
+            <div class="border-b border-slate-200 dark:border-slate-800 pb-6">
+                <h2 class="text-3xl font-serif font-semibold text-slate-900 dark:text-white tracking-wide">Preferences
+                </h2>
+                <p class="text-sm text-slate-500 dark:text-slate-400 font-light mt-1">Refine your environment and
+                    notification mechanics.</p>
+            </div>
+
+            <div
+                class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 max-w-2xl space-y-8 card-glow">
+
+                <!-- Sound Settings -->
+                <div class="flex items-center justify-between pb-6 border-b border-slate-100 dark:border-slate-800">
+                    <div>
+                        <h4 class="font-semibold text-slate-900 dark:text-white text-base">Gentle Audio Chimes</h4>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 font-light">Play soft, synthesized
+                            tones when milestones are reached.</p>
+                    </div>
+                    <button onclick="playTone()"
+                        class="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 text-xs font-semibold uppercase tracking-wider border border-slate-200 dark:border-slate-700 flex items-center gap-2 transition">
+                        <i class="fa-solid fa-music"></i> Test Tone
+                    </button>
+                </div>
+
+                <!-- Browser Notification Status -->
+                <div class="flex items-center justify-between pb-6 border-b border-slate-100 dark:border-slate-800">
+                    <div>
+                        <h4 class="font-semibold text-slate-900 dark:text-white text-base">Desktop Alerts</h4>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 font-light">Allow browser-level
+                            notifications to appear over other apps.</p>
+                    </div>
+                    <span id="settings-notify-status"
+                        class="text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-full bg-amber-100 text-amber-700 dark:bg-amber-500/10 dark:text-amber-400 border border-amber-200 dark:border-amber-500/20 font-bold">
+                        Pending Setup
+                    </span>
+                </div>
+
+                <!-- Reset Default Presets -->
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h4 class="font-semibold text-slate-900 dark:text-white text-base">Restore Factory Routines</h4>
+                        <p class="text-sm text-slate-500 dark:text-slate-400 mt-1 font-light">Bring back the default
+                            elegant focus setups.</p>
+                    </div>
+                    <button onclick="resetFactoryPresets()"
+                        class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white dark:bg-slate-100 dark:hover:bg-slate-200 dark:text-slate-900 text-xs font-semibold uppercase tracking-wider transition shadow-md">
+                        Restore
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+
+    <!-- ==================== MODAL 1: PRESET EDITOR MODAL ==================== -->
+    <div id="modal-preset-editor"
+        class="fixed inset-0 bg-slate-900/40 dark:bg-slate-950/80 backdrop-blur-md z-50 flex items-center justify-center p-4 hidden transition-opacity">
+        <div
+            class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2rem] w-full max-w-2xl max-h-[90vh] overflow-y-auto p-8 shadow-2xl">
+
+            <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-6 mb-6">
+                <h3 id="preset-modal-title" class="text-2xl font-serif font-semibold text-slate-900 dark:text-white">
+                    Design Routine</h3>
+                <button onclick="closePresetModal()"
+                    class="text-slate-400 hover:text-slate-600 dark:hover:text-white p-2 rounded-full hover:bg-slate-100 dark:hover:bg-slate-800 transition">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+            </div>
+
+            <form id="preset-form" onsubmit="savePresetFromForm(event)" class="space-y-8">
+                <input type="hidden" id="form-preset-id" value="" />
+
+                <!-- Preset Metadata -->
+                <div>
+                    <label
+                        class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Routine
+                        Title</label>
+                    <input type="text" id="form-preset-name" required placeholder="e.g., Morning Deep Work"
+                        class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-2xl px-5 py-3 text-slate-900 dark:text-slate-100 text-base focus:outline-none focus:border-teal-500 focus:ring-1 focus:ring-teal-500 transition" />
+                </div>
+
+                <!-- 1. Focus Timer Section -->
+                <div
+                    class="bg-slate-50 dark:bg-slate-950/60 p-6 rounded-3xl border border-slate-200 dark:border-slate-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="font-semibold text-slate-900 dark:text-white flex items-center gap-3 text-base">
+                            <i class="fa-solid fa-stopwatch text-teal-500"></i> Main Session Length
+                        </span>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="form-focus-enabled" checked class="sr-only peer">
+                            <div
+                                class="w-12 h-6 bg-slate-300 dark:bg-slate-700 rounded-full peer peer-checked:after:translate-x-6 peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-500">
+                            </div>
+                        </label>
+                    </div>
+
+                    <div id="form-focus-fields" class="flex flex-col sm:flex-row gap-4 items-center">
+                        <div class="w-full sm:w-1/2">
+                            <input type="number" id="form-focus-duration" min="1" max="300" value="50"
+                                class="w-full bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-3 text-slate-900 dark:text-slate-100 font-medium focus:outline-none focus:border-teal-500 transition"
+                                placeholder="Minutes" />
+                        </div>
+                        <p class="text-xs text-slate-500 dark:text-slate-400 font-light w-full sm:w-1/2">
+                            Session duration in minutes.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 2. Custom Notifications Manager -->
+                <div
+                    class="bg-slate-50 dark:bg-slate-950/60 p-6 rounded-3xl border border-slate-200 dark:border-slate-800">
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="font-semibold text-slate-900 dark:text-white flex items-center gap-3 text-base">
+                            <i class="fa-solid fa-bell text-amber-500"></i> Milestones & Breaks
+                        </span>
+                    </div>
+                    <p class="text-xs text-slate-500 dark:text-slate-400 font-light">
+                        Standard milestones will be automatically applied based on duration.
+                    </p>
+                </div>
+
+                <!-- 3. Advanced Modular Switches -->
+                <div
+                    class="bg-slate-50 dark:bg-slate-950/60 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 space-y-5">
+                    <h4 class="font-bold text-[10px] text-slate-400 uppercase tracking-widest mb-2">Behavior Preferences
+                    </h4>
+
+                    <!-- Strict Mode Switch -->
+                    <div class="flex items-center justify-between">
+                        <div>
+                            <label class="font-medium text-slate-800 dark:text-white block text-sm">Immersive Break
+                                Overlay</label>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 font-light mt-0.5">Displays a
+                                fullscreen mindful pause screen during breaks.</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="form-strict-enabled" class="sr-only peer" checked>
+                            <div
+                                class="w-11 h-6 bg-slate-300 dark:bg-slate-700 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-500">
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Smart Idle Detection Switch -->
+                    <div
+                        class="flex items-center justify-between border-t border-slate-200 dark:border-slate-800/80 pt-4">
+                        <div>
+                            <label class="font-medium text-slate-800 dark:text-white block text-sm">Smart Inactivity
+                                Pause</label>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 font-light mt-0.5">Automatically halts
+                                timer after 3 minutes away from desk.</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="form-idle-enabled" class="sr-only peer" checked>
+                            <div
+                                class="w-11 h-6 bg-slate-300 dark:bg-slate-700 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-500">
+                            </div>
+                        </label>
+                    </div>
+
+                    <!-- Analytics Switch -->
+                    <div
+                        class="flex items-center justify-between border-t border-slate-200 dark:border-slate-800/80 pt-4">
+                        <div>
+                            <label class="font-medium text-slate-800 dark:text-white block text-sm">Record
+                                Insights</label>
+                            <p class="text-xs text-slate-500 dark:text-slate-400 font-light mt-0.5">Save completion data
+                                locally to view in Analytics.</p>
+                        </div>
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input type="checkbox" id="form-analytics-enabled" class="sr-only peer" checked>
+                            <div
+                                class="w-11 h-6 bg-slate-300 dark:bg-slate-700 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-teal-500">
+                            </div>
+                        </label>
+                    </div>
+
+                </div>
+
+                <!-- Form Action Buttons -->
+                <div class="flex items-center justify-end gap-4 pt-4">
+                    <button type="button" onclick="closePresetModal()"
+                        class="px-6 py-3 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 text-sm font-semibold transition">
+                        Dismiss
+                    </button>
+                    <button type="submit"
+                        class="px-8 py-3 rounded-2xl bg-teal-500 hover:bg-teal-600 text-white dark:bg-gradient-to-r dark:from-teal-500 dark:to-teal-400 dark:text-slate-950 font-bold text-sm transition shadow-lg shadow-teal-500/20">
+                        Save Routine
+                    </button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+
+
+    <!-- ==================== OVERLAY: STRICT BREAK OVERLAY MODAL ==================== -->
+    <div id="strict-break-overlay"
+        class="fixed inset-0 bg-white/95 dark:bg-slate-950/95 backdrop-blur-xl z-50 flex flex-col items-center justify-center p-6 text-center hidden transition-all">
+
+        <!-- Gentle Breathing Visual -->
+        <div class="relative w-48 h-48 sm:w-64 sm:h-64 flex items-center justify-center mb-10">
+            <div class="absolute inset-0 rounded-full bg-teal-500/10 dark:bg-teal-500/20 animate-breathe"></div>
+            <div
+                class="relative z-10 w-32 h-32 sm:w-40 sm:h-40 rounded-full bg-gradient-to-tr from-teal-400 to-amber-300 dark:from-teal-500 dark:to-amber-500 flex items-center justify-center text-white shadow-2xl">
+                <i class="fa-solid fa-leaf text-4xl sm:text-5xl drop-shadow-md"></i>
+            </div>
+        </div>
+
+        <!-- Notification Alert Box Content -->
+        <div class="max-w-md space-y-4 mb-10">
+            <span id="overlay-tag"
+                class="text-[10px] font-bold uppercase tracking-widest text-amber-600 bg-amber-100 border border-amber-200 dark:text-amber-400 dark:bg-amber-500/10 dark:border-amber-500/20 px-4 py-1.5 rounded-full">
+                Mindful Rest
+            </span>
+            <h2 id="overlay-title"
+                class="text-3xl sm:text-4xl font-serif font-bold text-slate-900 dark:text-white tracking-wide mt-4">Take
+                a Breath</h2>
+            <p id="overlay-message" class="text-base text-slate-600 dark:text-slate-300 font-light leading-relaxed">
+                Step away from the screen. Stretch your shoulders, hydrate, and clear your mind before returning.
+            </p>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="flex flex-wrap items-center justify-center gap-4">
+            <button onclick="acknowledgeBreakOverlay()"
+                class="px-8 py-4 rounded-2xl font-bold text-white bg-teal-500 hover:bg-teal-600 dark:bg-gradient-to-r dark:from-teal-500 dark:to-teal-400 dark:text-slate-950 transition shadow-xl shadow-teal-500/20">
+                <i class="fa-solid fa-check mr-2"></i> Refreshed & Ready
+            </button>
+            <button id="overlay-snooze-btn" onclick="snoozeBreakOverlay()"
+                class="px-6 py-4 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-800 dark:hover:bg-slate-700 dark:text-slate-300 font-semibold border border-slate-200 dark:border-slate-700 transition">
+                <i class="fa-solid fa-clock-rotate-left mr-2"></i> Snooze 2 Min
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Footer -->
+    <footer
+        class="border-t border-slate-200 dark:border-slate-800 py-6 text-center text-xs text-slate-500 dark:text-slate-500 font-light transition-colors">
+        Oasis Timer &bull; Premium Focus Suite &bull; All Data Stored Locally
+    </footer>
+
+
+    <!-- ==================== JAVASCRIPT LOGIC ENGINE ==================== -->
+    <script>
+
+        // Default Factory Presets Data Structure
+        const FACTORY_PRESETS = [
+            {
+                id: "preset_gentle_flow",
+                name: "Gentle Flow (25m)",
+                focus: { enabled: true, duration: 25 },
+                notifications: [
+                    { id: "n1", triggerMinutes: 25, label: "Short Refresh Break", message: "Take 5 minutes to stand up, hydrate, and stretch your legs.", type: "break" }
+                ],
+                features: { strictOverlay: true, smartIdle: true, logAnalytics: true }
+            },
+            {
+                id: "preset_deep_oasis",
+                name: "Deep Oasis Work (50m)",
+                focus: { enabled: true, duration: 50 },
+                notifications: [
+                    { id: "n1", triggerMinutes: 25, label: "Mindful Check-in", message: "Take a deep breath and correct your posture.", type: "micro" },
+                    { id: "n2", triggerMinutes: 50, label: "Full Rest Recovery", message: "Take a 10-minute break. Walk away from your desk to reset your mind.", type: "break" }
+                ],
+                features: { strictOverlay: true, smartIdle: true, logAnalytics: true }
+            },
+            {
+                id: "preset_quick_burst",
+                name: "Quick Burst (15m)",
+                focus: { enabled: true, duration: 15 },
+                notifications: [
+                    { id: "n1", triggerMinutes: 15, label: "Moment of Zen", message: "Close your eyes and take three deep breaths.", type: "break" }
+                ],
+                features: { strictOverlay: false, smartIdle: true, logAnalytics: true }
+            }
+        ];
+
+        // State Variables
+        let presets = JSON.parse(localStorage.getItem('oasis_presets')) || FACTORY_PRESETS;
+        let activePresetId = localStorage.getItem('oasis_active_preset') || FACTORY_PRESETS[0].id;
+        let analyticsLog = JSON.parse(localStorage.getItem('oasis_analytics')) || [];
+        let sessionTasks = JSON.parse(localStorage.getItem('oasis_tasks')) || [];
+        let isDarkMode = localStorage.getItem('oasis_theme') !== 'light';
+
+        let timerInterval = null;
+        let isRunning = false;
+        let timeRemaining = 0;
+        let totalDurationSeconds = 0;
+        let triggeredAlerts = new Set();
+
+        let idleTime = 0;
+
+        // Ambient Noise Generator Variables
+        let ambientCtx = null;
+        let ambientSourceNode = null;
+        let ambientGainNode = null;
+
+        // Initialize Theme
+        function initTheme() {
+            const htmlEl = document.documentElement;
+            const iconEl = document.getElementById('theme-icon');
+            if (isDarkMode) {
+                htmlEl.classList.add('dark');
+                iconEl.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                htmlEl.classList.remove('dark');
+                iconEl.classList.replace('fa-sun', 'fa-moon');
+            }
+        }
+
+        function toggleTheme() {
+            isDarkMode = !isDarkMode;
+            localStorage.setItem('oasis_theme', isDarkMode ? 'dark' : 'light');
+            initTheme();
+        }
+
+        // ==================== AUDIO CHIME LIBRARY ====================
+        function playTone() {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const soundType = document.getElementById('sound-type').value;
+                const oscillator = audioCtx.createOscillator();
+                const gainNode = audioCtx.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioCtx.destination);
+                const now = audioCtx.currentTime;
+                
+                if (soundType === 'synth') {
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(880, now);
+                    gainNode.gain.setValueAtTime(0, now);
+                    gainNode.gain.linearRampToValueAtTime(1, now + 0.05);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+                    oscillator.start(now);
+                    oscillator.stop(now + 0.5);
+                } else if (soundType === 'bowl') {
+                    oscillator.type = 'sine';
+                    oscillator.frequency.setValueAtTime(432, now);
+                    gainNode.gain.setValueAtTime(0, now);
+                    gainNode.gain.linearRampToValueAtTime(0.8, now + 0.2);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 3.0);
+                    oscillator.start(now);
+                    oscillator.stop(now + 3.0);
+                } else if (soundType === 'gong') {
+                    oscillator.type = 'triangle';
+                    oscillator.frequency.setValueAtTime(150, now);
+                    oscillator.frequency.exponentialRampToValueAtTime(50, now + 2.0);
+                    gainNode.gain.setValueAtTime(0, now);
+                    gainNode.gain.linearRampToValueAtTime(1, now + 0.05);
+                    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 2.5);
+                    oscillator.start(now);
+                    oscillator.stop(now + 2.5);
+                }
+            } catch (e) {
+                console.warn('Audio play error:', e);
+            }
+        }
+
+        // ==================== AMBIENT NOISE GENERATOR ====================
+        function changeAmbientSound(type) {
+            stopAmbientSound();
+            if (type === 'off') return;
+
+            try {
+                ambientCtx = new (window.AudioContext || window.webkitAudioContext)();
+                const bufferSize = 2 * ambientCtx.sampleRate;
+                const noiseBuffer = ambientCtx.createBuffer(1, bufferSize, ambientCtx.sampleRate);
+                const output = noiseBuffer.getChannelData(0);
+
+                for (let i = 0; i < bufferSize; i++) {
+                    output[i] = Math.random() * 2 - 1;
+                }
+
+                ambientSourceNode = ambientCtx.createBufferSource();
+                ambientSourceNode.buffer = noiseBuffer;
+                ambientSourceNode.loop = true;
+
+                ambientGainNode = ambientCtx.createGain();
+                ambientGainNode.gain.setValueAtTime(0.15, ambientCtx.currentTime); // Soft volume
+
+                if (type === 'rain') {
+                    // Filter noise to sound like soft rainfall (lowpass filter)
+                    const filter = ambientCtx.createBiquadFilter();
+                    filter.type = 'lowpass';
+                    filter.frequency.setValueAtTime(800, ambientCtx.currentTime);
+                    ambientSourceNode.connect(filter);
+                    filter.connect(ambientGainNode);
+                } else if (type === 'drone') {
+                    const filter = ambientCtx.createBiquadFilter();
+                    filter.type = 'bandpass';
+                    filter.frequency.setValueAtTime(220, ambientCtx.currentTime);
+                    ambientSourceNode.connect(filter);
+                    filter.connect(ambientGainNode);
+                } else {
+                    // White noise
+                    ambientSourceNode.connect(ambientGainNode);
+                }
+
+                ambientGainNode.connect(ambientCtx.destination);
+                ambientSourceNode.start();
+            } catch (e) {
+                console.warn('Ambient sound generation error:', e);
+            }
+        }
+
+        function stopAmbientSound() {
+            if (ambientSourceNode) {
+                try {
+                    ambientSourceNode.stop();
+                    ambientSourceNode.disconnect();
+                } catch (e) {}
+                ambientSourceNode = null;
+            }
+            if (ambientCtx && ambientCtx.state !== 'closed') {
+                ambientCtx.close();
+                ambientCtx = null;
+            }
+        }
+
+        // Core Initialization
+        window.addEventListener('DOMContentLoaded', () => {
+            initTheme();
+            renderPresetDropdown();
+            loadActivePreset();
+            setupIdleDetection();
+            updateAnalyticsUI();
+            renderTasksList();
+            checkNotificationPermissionStatus();
+        });
+
+        // Tab Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => {
+                el.classList.remove('block');
+                el.classList.add('hidden');
+            });
+            const activeTab = document.getElementById(`tab-${tabId}`);
+            activeTab.classList.remove('hidden');
+            activeTab.classList.add('block');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-teal-700', 'bg-white', 'shadow-sm', 'dark:text-teal-400', 'dark:bg-slate-800/80');
+                btn.classList.add('text-slate-500', 'dark:text-slate-400');
+            });
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            if (activeNav) {
+                activeNav.classList.remove('text-slate-500', 'dark:text-slate-400');
+                activeNav.classList.add('text-teal-700', 'bg-white', 'shadow-sm', 'dark:text-teal-400', 'dark:bg-slate-800/80');
+            }
+        }
+
+        // Active Preset Engine
+        function getActivePreset() {
+            return presets.find(p => p.id === activePresetId) || presets[0];
+        }
+
+        function changeActivePreset(presetId) {
+            activePresetId = presetId;
+            localStorage.setItem('oasis_active_preset', presetId);
+            resetTimer();
+        }
+
+        function renderPresetDropdown() {
+            const select = document.getElementById('active-preset-select');
+            select.innerHTML = presets.map(p => `<option value="${p.id}" ${p.id === activePresetId ? 'selected' : ''} class="text-sm text-slate-800">${p.name}</option>`).join('');
+            renderPresetsGrid();
+        }
+
+        function loadActivePreset() {
+            const preset = getActivePreset();
+
+            const badgesContainer = document.getElementById('preset-feature-badges');
+            badgesContainer.innerHTML = `
+        ${preset.features.strictOverlay ? '<span class="text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full bg-teal-50 text-teal-600 dark:bg-teal-500/10 dark:text-teal-400 border border-teal-100 dark:border-teal-500/20"><i class="fa-solid fa-shield-halved"></i> Immersive</span>' : ''}
+        ${preset.features.smartIdle ? '<span class="text-[10px] uppercase tracking-widest font-bold px-3 py-1 rounded-full bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400 border border-blue-100 dark:border-blue-500/20"><i class="fa-solid fa-moon"></i> Smart Pause</span>' : ''}
+      `;
+
+            totalDurationSeconds = (preset.focus.enabled ? preset.focus.duration : 25) * 60;
+            timeRemaining = totalDurationSeconds;
+            triggeredAlerts.clear();
+            updateTimerDisplay();
+            renderTimeline();
+        }
+
+        // Timer Controls
+        function toggleTimer() {
+            const btn = document.getElementById('btn-start-pause');
+            if (isRunning) {
+                pauseTimer();
+                btn.innerHTML = `<i class="fa-solid fa-play text-sm"></i> <span>Resume Flow</span>`;
+            } else {
+                startTimer();
+                btn.innerHTML = `<i class="fa-solid fa-pause text-sm"></i> <span>Pause Flow</span>`;
+            }
+        }
+
+        function startTimer() {
+            if (isRunning) return;
+            isRunning = true;
+            timerInterval = setInterval(tick, 1000);
+            document.getElementById('live-status-bar').innerHTML = `<span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span> In deep work`;
+        }
+
+        function pauseTimer() {
+            isRunning = false;
+            clearInterval(timerInterval);
+            document.getElementById('live-status-bar').innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500"></span> Flow paused`;
+        }
+
+        function resetTimer() {
+            pauseTimer();
+            document.getElementById('btn-start-pause').innerHTML = `<i class="fa-solid fa-play text-sm"></i> <span>Begin Flow</span>`;
+            document.getElementById('live-status-bar').innerHTML = `<span class="w-2 h-2 rounded-full bg-teal-500 animate-pulse"></span> Ready to focus`;
+            loadActivePreset();
+        }
+
+        function skipToNextBreak() {
+            const preset = getActivePreset();
+            if (preset.notifications.length > 0) {
+                triggerBreakOverlay(preset.notifications[0]);
+            }
+        }
+
+        function tick() {
+            if (timeRemaining > 0) {
+                timeRemaining--;
+                updateTimerDisplay();
+                checkScheduledAlerts();
+            } else {
+                completeSession();
+            }
+        }
+
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeRemaining / 60);
+            const seconds = timeRemaining % 60;
+            document.getElementById('time-display').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+            const ring = document.getElementById('timer-progress-ring');
+            const circumference = 289.03;
+            const progress = totalDurationSeconds > 0 ? (1 - timeRemaining / totalDurationSeconds) : 0;
+            ring.style.strokeDashoffset = circumference * progress;
+        }
+
+        function checkScheduledAlerts() {
+            const preset = getActivePreset();
+            const elapsedMinutes = Math.floor((totalDurationSeconds - timeRemaining) / 60);
+
+            preset.notifications.forEach(notif => {
+                if (elapsedMinutes >= notif.triggerMinutes && !triggeredAlerts.has(notif.id)) {
+                    triggeredAlerts.add(notif.id);
+                    triggerBreakOverlay(notif);
+                }
+            });
+        }
+
+        function triggerBreakOverlay(notif) {
+            const preset = getActivePreset();
+            playTone();
+
+            if (preset.features.strictOverlay) {
+                document.getElementById('overlay-title').textContent = notif.label;
+                document.getElementById('overlay-message').textContent = notif.message;
+                document.getElementById('strict-break-overlay').classList.remove('hidden');
+            }
+
+            if (Notification.permission === 'granted') {
+                new Notification(`Oasis Timer: ${notif.label}`, { body: notif.message });
+            }
+        }
+
+        function acknowledgeBreakOverlay() {
+            document.getElementById('strict-break-overlay').classList.add('hidden');
+            recordAnalytics(true);
+        }
+
+        function snoozeBreakOverlay() {
+            document.getElementById('strict-break-overlay').classList.add('hidden');
+            timeRemaining += 120;
+            recordAnalytics(false);
+        }
+
+        function completeSession() {
+            pauseTimer();
+            const preset = getActivePreset();
+            if (preset.features.logAnalytics) {
+                recordAnalytics(true, true);
+            }
+            playTone();
+            alert('Focus session gracefully completed! Great job.');
+            resetTimer();
+        }
+
+        // ==================== SESSION TASK LIST MANAGER ====================
+        function addNewTask(e) {
+            e.preventDefault();
+            const input = document.getElementById('new-task-input');
+            const text = input.value.trim();
+            if (!text) return;
+
+            sessionTasks.push({ id: `task_${Date.now()}`, text: text, completed: false });
+            input.value = '';
+            saveAndRenderTasks();
+        }
+
+        function toggleTaskComplete(id) {
+            const task = sessionTasks.find(t => t.id === id);
+            if (task) {
+                task.completed = !task.completed;
+                saveAndRenderTasks();
+            }
+        }
+
+        function deleteTask(id) {
+            sessionTasks = sessionTasks.filter(t => t.id !== id);
+            saveAndRenderTasks();
+        }
+
+        function saveAndRenderTasks() {
+            localStorage.setItem('oasis_tasks', JSON.stringify(sessionTasks));
+            renderTasksList();
+        }
+
+        function renderTasksList() {
+            const container = document.getElementById('task-list-container');
+            const completedCount = sessionTasks.filter(t => t.completed).length;
+            document.getElementById('task-counter-badge').textContent = `${completedCount}/${sessionTasks.length} Done`;
+
+            if (sessionTasks.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-400 dark:text-slate-500 italic text-center py-4">No tasks added yet for this session.</p>`;
+                return;
+            }
+
+            container.innerHTML = sessionTasks.map(t => `
+                <div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800 transition">
+                    <label class="flex items-center gap-3 cursor-pointer flex-1 mr-2">
+                        <input type="checkbox" ${t.completed ? 'checked' : ''} onclick="toggleTaskComplete('${t.id}')"
+                            class="rounded border-slate-300 text-teal-500 focus:ring-teal-500 h-4 w-4 cursor-pointer">
+                        <span class="text-xs ${t.completed ? 'line-through text-slate-400 dark:text-slate-500' : 'text-slate-700 dark:text-slate-200'} font-medium transition">${t.text}</span>
+                    </label>
+                    <button onclick="deleteTask('${t.id}')" class="text-slate-400 hover:text-red-500 text-xs transition p-1"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
+            `).join('');
+        }
+
+        // Timeline Visualizer
+        function renderTimeline() {
+            const preset = getActivePreset();
+            const list = document.getElementById('timeline-list');
+            document.getElementById('notification-count-badge').textContent = `${preset.notifications.length} Milestones`;
+
+            if (preset.notifications.length === 0) {
+                list.innerHTML = `<p class="text-xs text-slate-400 dark:text-slate-500 italic text-center py-6">No milestones scheduled for this routine.</p>`;
+                return;
+            }
+
+            list.innerHTML = preset.notifications.map(n => `
+        <div class="flex items-center gap-3 p-3 rounded-2xl bg-slate-50 dark:bg-slate-950/50 border border-slate-100 dark:border-slate-800 transition-all">
+          <div class="p-2 rounded-xl bg-white dark:bg-slate-900 text-teal-500 dark:text-teal-400 border border-slate-200 dark:border-slate-700 shadow-sm text-xs font-bold">
+            ${n.triggerMinutes}m
+          </div>
+          <div class="flex-1">
+            <h4 class="text-xs font-semibold text-slate-900 dark:text-white">${n.label}</h4>
+            <p class="text-[11px] text-slate-500 dark:text-slate-400 truncate mt-0.5 font-light">${n.message}</p>
+          </div>
+        </div>
+      `).join('');
+        }
+
+        // Idle Detection
+        function setupIdleDetection() {
+            const resetIdle = () => { idleTime = 0; };
+            window.onmousemove = resetIdle;
+            window.onkeypress = resetIdle;
+
+            setInterval(() => {
+                const preset = getActivePreset();
+                if (isRunning && preset.features.smartIdle) {
+                    idleTime++;
+                    if (idleTime >= 180) {
+                        pauseTimer();
+                        document.getElementById('live-status-bar').innerHTML = `<span class="w-2 h-2 rounded-full bg-amber-500"></span> Paused: Away from desk`;
+                    }
+                }
+            }, 1000);
+        }
+
+        // Analytics Tracker
+        function recordAnalytics(breakTaken, sessionComplete = false) {
+            const preset = getActivePreset();
+            analyticsLog.push({
+                presetName: preset.name,
+                durationMinutes: preset.focus.duration,
+                breakTaken: breakTaken,
+                completed: sessionComplete,
+                timestamp: new Date().toISOString()
+            });
+            localStorage.setItem('oasis_analytics', JSON.stringify(analyticsLog));
+            updateAnalyticsUI();
+        }
+
+        function updateAnalyticsUI() {
+            const totalFocus = analyticsLog.reduce((acc, curr) => acc + (curr.durationMinutes || 0), 0);
+            const completed = analyticsLog.filter(l => l.completed).length;
+            const breaksTaken = analyticsLog.filter(l => l.breakTaken).length;
+            const breaksSkipped = analyticsLog.filter(l => !l.breakTaken && !l.completed).length;
+
+            document.getElementById('stat-total-focus').textContent = `${totalFocus}m`;
+            document.getElementById('stat-completed-sessions').textContent = completed;
+            document.getElementById('stat-breaks-taken').textContent = breaksTaken;
+            document.getElementById('stat-breaks-skipped').textContent = breaksSkipped;
+
+            const tbody = document.getElementById('session-log-rows');
+            if (analyticsLog.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" class="p-6 text-center text-slate-400 italic">Your journey begins here. No entries logged yet.</td></tr>`;
+                return;
+            }
+
+            tbody.innerHTML = analyticsLog.slice(-5).reverse().map(log => `
+        <tr class="hover:bg-slate-50 dark:hover:bg-slate-800/40 transition-colors">
+          <td class="p-4 font-semibold text-slate-900 dark:text-white">${log.presetName}</td>
+          <td class="p-4">${log.durationMinutes}m</td>
+          <td class="p-4">${log.breakTaken ? '<span class="text-teal-600 dark:text-teal-400 font-medium"><i class="fa-solid fa-check mr-1"></i> Embraced</span>' : '<span class="text-amber-600 dark:text-amber-400 font-medium"><i class="fa-solid fa-forward mr-1"></i> Skipped</span>'}</td>
+          <td class="p-4 text-slate-400">${new Date(log.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</td>
+        </tr>
+      `).join('');
+        }
+
+        function clearAnalyticsLogs() {
+            if (confirm('Erase all historical focus data?')) {
+                analyticsLog = [];
+                localStorage.removeItem('oasis_analytics');
+                updateAnalyticsUI();
+            }
+        }
+
+        function exportAnalyticsJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(analyticsLog, null, 2));
+            const dlAnchorElem = document.createElement('a');
+            dlAnchorElem.setAttribute("href", dataStr);
+            dlAnchorElem.setAttribute("download", `oasis_insights_${new Date().toISOString().slice(0, 10)}.json`);
+            dlAnchorElem.click();
+        }
+
+        // Modal & Form Handlers
+        function renderPresetsGrid() {
+            const container = document.getElementById('presets-grid');
+            container.innerHTML = presets.map(p => `
+        <div class="bg-white dark:bg-slate-900 border ${p.id === activePresetId ? 'border-teal-400 dark:border-teal-500/50 shadow-md shadow-teal-500/10' : 'border-slate-200 dark:border-slate-800'} rounded-3xl p-6 flex flex-col justify-between transition-all hover:-translate-y-1">
+          <div>
+            <div class="flex items-center justify-between mb-3">
+              <h3 class="font-serif font-bold text-lg text-slate-900 dark:text-white">${p.name}</h3>
+              ${p.id === activePresetId ? '<span class="text-[9px] font-bold uppercase tracking-widest px-2.5 py-1 bg-teal-50 text-teal-600 dark:bg-teal-500/10 dark:text-teal-400 rounded-lg">Active</span>' : ''}
+            </div>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mb-6 font-light">${p.focus.enabled ? `${p.focus.duration} minute block` : 'Continuous timer'}</p>
+          </div>
+          <div class="flex items-center justify-between border-t border-slate-100 dark:border-slate-800 pt-5">
+            <button onclick="changeActivePreset('${p.id}')" class="text-xs font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 hover:text-teal-700 dark:hover:text-teal-300 transition">Set Routine</button>
+            <button onclick="deletePreset('${p.id}')" class="text-slate-400 hover:text-red-500 text-sm transition"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        </div>
+      `).join('');
+        }
+
+        function createNewPresetModal() {
+            document.getElementById('preset-modal-title').textContent = "Design Custom Routine";
+            document.getElementById('form-preset-id').value = "";
+            document.getElementById('form-preset-name').value = "";
+            document.getElementById('modal-preset-editor').classList.remove('hidden');
+        }
+
+        function closePresetModal() {
+            document.getElementById('modal-preset-editor').classList.add('hidden');
+        }
+
+        function deletePreset(id) {
+            if (presets.length <= 1) return alert('You must keep at least one routine in your library!');
+            presets = presets.filter(p => p.id !== id);
+            localStorage.setItem('oasis_presets', JSON.stringify(presets));
+            if (activePresetId === id) activePresetId = presets[0].id;
+            renderPresetDropdown();
+            loadActivePreset();
+        }
+
+        function savePresetFromForm(e) {
+            e.preventDefault();
+            const name = document.getElementById('form-preset-name').value;
+            const duration = parseInt(document.getElementById('form-focus-duration').value) || 25;
+
+            const newPreset = {
+                id: `custom_${Date.now()}`,
+                name: name,
+                focus: { enabled: true, duration: duration },
+                notifications: [
+                    { id: "cn1", triggerMinutes: Math.floor(duration / 2), label: "Mindful Check-in", message: "Take a moment to breathe and reset your posture.", type: "break" }
+                ],
+                features: {
+                    strictOverlay: document.getElementById('form-strict-enabled').checked,
+                    smartIdle: document.getElementById('form-idle-enabled').checked,
+                    logAnalytics: document.getElementById('form-analytics-enabled').checked
+                }
+            };
+
+            presets.push(newPreset);
+            localStorage.setItem('oasis_presets', JSON.stringify(presets));
+            activePresetId = newPreset.id;
+            renderPresetDropdown();
+            loadActivePreset();
+            closePresetModal();
+        }
+
+        // System Utilities
+        function requestNotificationPermission() {
+            if (!('Notification' in window)) return alert('Desktop notifications not supported in this browser.');
+            Notification.requestPermission().then(() => {
+                checkNotificationPermissionStatus();
+            });
+        }
+
+        function checkNotificationPermissionStatus() {
+            const statusSpan = document.getElementById('settings-notify-status');
+            if (Notification.permission === 'granted') {
+                statusSpan.textContent = 'Active';
+                statusSpan.className = 'text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-full bg-teal-50 text-teal-700 dark:bg-teal-500/10 dark:text-teal-400 border border-teal-200 dark:border-teal-500/20 font-bold';
+            } else if (Notification.permission === 'denied') {
+                statusSpan.textContent = 'Blocked';
+                statusSpan.className = 'text-[10px] uppercase tracking-widest px-3 py-1.5 rounded-full bg-red-50 text-red-700 dark:bg-red-500/10 dark:text-red-400 border border-red-200 dark:border-red-500/20 font-bold';
+            }
+        }
+
+        function resetFactoryPresets() {
+            if (confirm('Revert all routines to factory defaults?')) {
+                presets = FACTORY_PRESETS;
+                activePresetId = FACTORY_PRESETS[0].id;
+                localStorage.setItem('oasis_presets', JSON.stringify(presets));
+                renderPresetDropdown();
+                loadActivePreset();
+            }
+        }
+
+        // ==================== KEYBOARD SHORTCUTS ====================
+        document.addEventListener('keydown', function (event) {
+            const isTyping = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
+            if (isTyping) return;
+
+            if (event.code === 'Space') {
+                event.preventDefault();
+                const overlay = document.getElementById('strict-break-overlay');
+                if (overlay.classList.contains('hidden')) {
+                    toggleTimer();
+                }
+            }
+
+            if (event.code === 'Escape') {
+                const overlay = document.getElementById('strict-break-overlay');
+                const presetModal = document.getElementById('modal-preset-editor');
+
+                if (!overlay.classList.contains('hidden')) {
+                    acknowledgeBreakOverlay();
+                } else if (!presetModal.classList.contains('hidden')) {
+                    closePresetModal();
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
