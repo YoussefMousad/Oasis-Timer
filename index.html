@@ -334,7 +334,7 @@
                         </div>
                     </div>
 
-                    <!-- Session Task List Card (NEW FEATURE) -->
+                    <!-- Session Task List Card -->
                     <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-[2.5rem] p-8 card-glow">
                         <div class="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-5 mb-5">
                             <h3 class="font-serif font-semibold text-lg text-slate-900 dark:text-white flex items-center gap-2">
@@ -512,6 +512,25 @@
 
             <div
                 class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-8 max-w-2xl space-y-8 card-glow">
+
+                <!-- Customizable Break Settings -->
+                <div class="pb-6 border-b border-slate-100 dark:border-slate-800">
+                    <h4 class="font-semibold text-slate-900 dark:text-white text-base mb-1">Custom Break Durations</h4>
+                    <p class="text-sm text-slate-500 dark:text-slate-400 font-light mb-4">Set default durations for short and long rests.</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="setting-short-break" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Short Break (min)</label>
+                            <input type="number" id="setting-short-break" min="1" max="60" value="5" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-slate-900 dark:text-slate-100 font-medium focus:outline-none focus:border-teal-500 transition" />
+                        </div>
+                        <div>
+                            <label for="setting-long-break" class="block text-xs font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-2">Long Break (min)</label>
+                            <input type="number" id="setting-long-break" min="1" max="120" value="15" class="w-full bg-slate-50 dark:bg-slate-950 border border-slate-200 dark:border-slate-700 rounded-xl px-4 py-2.5 text-slate-900 dark:text-slate-100 font-medium focus:outline-none focus:border-teal-500 transition" />
+                        </div>
+                    </div>
+                    <div class="flex justify-end mt-4">
+                        <button onclick="saveBreakSettings()" class="px-5 py-2.5 rounded-xl bg-teal-500 hover:bg-teal-600 text-white font-semibold text-xs uppercase tracking-wider transition shadow-sm">Save Preferences</button>
+                    </div>
+                </div>
 
                 <!-- Sound Settings -->
                 <div class="flex items-center justify-between pb-6 border-b border-slate-100 dark:border-slate-800">
@@ -758,7 +777,7 @@
                 name: "Gentle Flow (25m)",
                 focus: { enabled: true, duration: 25 },
                 notifications: [
-                    { id: "n1", triggerMinutes: 25, label: "Short Refresh Break", message: "Take 5 minutes to stand up, hydrate, and stretch your legs.", type: "break" }
+                    { id: "n1", triggerMinutes: 25, label: "Short Refresh Break", message: "Take a break to stand up, hydrate, and stretch your legs.", type: "break" }
                 ],
                 features: { strictOverlay: true, smartIdle: true, logAnalytics: true }
             },
@@ -768,7 +787,7 @@
                 focus: { enabled: true, duration: 50 },
                 notifications: [
                     { id: "n1", triggerMinutes: 25, label: "Mindful Check-in", message: "Take a deep breath and correct your posture.", type: "micro" },
-                    { id: "n2", triggerMinutes: 50, label: "Full Rest Recovery", message: "Take a 10-minute break. Walk away from your desk to reset your mind.", type: "break" }
+                    { id: "n2", triggerMinutes: 50, label: "Full Rest Recovery", message: "Take a break. Walk away from your desk to reset your mind.", type: "break" }
                 ],
                 features: { strictOverlay: true, smartIdle: true, logAnalytics: true }
             },
@@ -789,6 +808,9 @@
         let analyticsLog = JSON.parse(localStorage.getItem('oasis_analytics')) || [];
         let sessionTasks = JSON.parse(localStorage.getItem('oasis_tasks')) || [];
         let isDarkMode = localStorage.getItem('oasis_theme') !== 'light';
+
+        let shortBreakDuration = parseInt(localStorage.getItem('oasis_short_break')) || 5;
+        let longBreakDuration = parseInt(localStorage.getItem('oasis_long_break')) || 15;
 
         let timerInterval = null;
         let isRunning = false;
@@ -820,6 +842,26 @@
             isDarkMode = !isDarkMode;
             localStorage.setItem('oasis_theme', isDarkMode ? 'dark' : 'light');
             initTheme();
+        }
+
+        // Custom Break Duration Handlers
+        function loadBreakSettingsUI() {
+            const shortEl = document.getElementById('setting-short-break');
+            const longEl = document.getElementById('setting-long-break');
+            if (shortEl) shortEl.value = shortBreakDuration;
+            if (longEl) longEl.value = longBreakDuration;
+        }
+
+        function saveBreakSettings() {
+            const sVal = parseInt(document.getElementById('setting-short-break').value);
+            const lVal = parseInt(document.getElementById('setting-long-break').value);
+            if (sVal > 0 && lVal > 0) {
+                shortBreakDuration = sVal;
+                longBreakDuration = lVal;
+                localStorage.setItem('oasis_short_break', shortBreakDuration);
+                localStorage.setItem('oasis_long_break', longBreakDuration);
+                alert('Custom break durations updated!');
+            }
         }
 
         // ==================== AUDIO CHIME LIBRARY ====================
@@ -885,10 +927,9 @@
                 ambientSourceNode.loop = true;
 
                 ambientGainNode = ambientCtx.createGain();
-                ambientGainNode.gain.setValueAtTime(0.15, ambientCtx.currentTime); // Soft volume
+                ambientGainNode.gain.setValueAtTime(0.15, ambientCtx.currentTime);
 
                 if (type === 'rain') {
-                    // Filter noise to sound like soft rainfall (lowpass filter)
                     const filter = ambientCtx.createBiquadFilter();
                     filter.type = 'lowpass';
                     filter.frequency.setValueAtTime(800, ambientCtx.currentTime);
@@ -901,7 +942,6 @@
                     ambientSourceNode.connect(filter);
                     filter.connect(ambientGainNode);
                 } else {
-                    // White noise
                     ambientSourceNode.connect(ambientGainNode);
                 }
 
@@ -935,6 +975,7 @@
             updateAnalyticsUI();
             renderTasksList();
             checkNotificationPermissionStatus();
+            loadBreakSettingsUI();
         });
 
         // Tab Navigation
@@ -1069,7 +1110,7 @@
 
             if (preset.features.strictOverlay) {
                 document.getElementById('overlay-title').textContent = notif.label;
-                document.getElementById('overlay-message').textContent = notif.message;
+                document.getElementById('overlay-message').textContent = `${notif.message} (Recommended Rest: ${shortBreakDuration} mins)`;
                 document.getElementById('strict-break-overlay').classList.remove('hidden');
             }
 
@@ -1096,11 +1137,11 @@
                 recordAnalytics(true, true);
             }
             playTone();
-            alert('Focus session gracefully completed! Great job.');
+            alert(`Focus session gracefully completed! Take a ${longBreakDuration}-minute long break.`);
             resetTimer();
         }
 
-        // ==================== SESSION TASK LIST MANAGER ====================
+        // Session Task List Manager
         function addNewTask(e) {
             e.preventDefault();
             const input = document.getElementById('new-task-input');
@@ -1347,7 +1388,7 @@
             }
         }
 
-        // ==================== KEYBOARD SHORTCUTS ====================
+        // Keyboard Shortcuts
         document.addEventListener('keydown', function (event) {
             const isTyping = ['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName);
             if (isTyping) return;
